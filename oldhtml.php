@@ -17,9 +17,9 @@
 
 
                 if (!in_array($tag, $htmlValidTags)){
-                        die("Invalid HTML tag");
+                        return false;
                 }else{
-                        return '<' . $tag . '>';
+                        return true;
                 }
 
         }

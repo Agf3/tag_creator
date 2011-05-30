@@ -1,7 +1,7 @@
 /*
 *Author: Eli Goldner
 *Description: this function will only accept a tag that is valid in HTML5
-/
+*/
 
 <?php
 
@@ -18,9 +18,9 @@
 
 	
 		if (!in_array($tag, $html5ValidTags)){
-                        die("Invalid HTML5 tag");
+                        return false;
 		}else{
-			return '<' . $tag . '>'; 
+			return true; 
 		}
 
 	}
