@@ -48,7 +48,7 @@ function logError($anyError) {
 						"Thrown on line: " . $anyError->getLine(), "Code: " . $anyError->getCode(), 
 						"Called by function: " . $traceError[0]['function'], "On line: " . $traceError[0]['line'],
 						"in " . $traceError[0]['file'], "Classification: " . classify($anyError->getCode()));	
-	
+	print_r($errorInfo);
 }
 
 //this function assumes that a severe error code is between 111 and 120 
