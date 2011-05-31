@@ -1,3 +1,9 @@
+/*
+*Authors: Eli Goldner
+*	  Chaim Tewel
+*	  Eli Zentman
+*/
+
 <?php	
 
 $attributes = array();
@@ -17,9 +23,9 @@ function aTag($tag, $attributes, $content){
 		exception_tester($tag, $attributes, $content);
 		//if no exception has been thrown then generate a html tag
 		$html = '<' . $tag;
-		foreach($attributes as $attribute=>$value){
+		foreach($attributes as $key=>$value){
 			if(isset($value)){
-				$html .= ' ' . $attribute . '="' . $value . '"';		
+				$html .= ' ' . $key . '="' . $value . '"';		
 			}
      		}
 		$html .= '>' . $content . "</" . $tag . "><br>\n";
@@ -33,22 +39,31 @@ function aTag($tag, $attributes, $content){
 
 function exception_tester($tag, $attributes, $content){
 		//test if the content is a string
+
+		if (!html5TagValidate($tag)){
+                        throw new Exception("Invalid HTML5 tag.", 123);
+                }		
+		if(!is_array($attributes)){
+			throw new Exception("Attribute must be an array.",121);			
+		}
+
 		if(!is_string($content)){
 			throw  new Exception("Content must be strings", 111);
-		}
-		if (!html5TagValidate($tag)){
-			throw new Exception("Invalid HTML5 tag.", 123);
 		}
 }
 
 //parse exception details and returns an array that can be written to a log
 function logError($anyError) {
 	$traceError = $anyError->getTrace();
-	$errorInfo = array("Message: " . $anyError->getMessage(), "File: " . $anyError->getFile(), 
-						"Thrown on line: " . $anyError->getLine(), "Code: " . $anyError->getCode(), 
-						"Called by function: " . $traceError[0]['function'], "On line: " . $traceError[0]['line'],
-						"in " . $traceError[0]['file'], "Classification: " . classify($anyError->getCode()));	
-	print_r($errorInfo);
+	$errorInfo = array("Message: " . $anyError->getMessage(),
+			   "File: " . $anyError->getFile(), 
+    			   "Thrown on line: " . $anyError->getLine(),
+			   "Code: " . $anyError->getCode(), 
+ 			   "Called by function: " . $traceError[0]['function'],
+			   "On line: " . $traceError[0]['line'],
+			   "in " . $traceError[0]['file'],
+			   "Classification: " . classify($anyError->getCode()));	
+
 }
 
 //this function assumes that a severe error code is between 111 and 120 
