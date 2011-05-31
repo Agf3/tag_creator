@@ -1,8 +1,10 @@
+<!--  
 /*
 *Authors: Eli Goldner
 *	  Chaim Tewel
 *	  Eli Zentman
 */
+-->
 
 <?php	
 
