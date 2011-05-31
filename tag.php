@@ -10,8 +10,7 @@ $attributes = array();
 
 $tag = "a";
 $attributes = array("id" => "myid", "href" => "http://www.google.com", "class" => "myfirstclass mysecondclass");
-$content = 5;
-
+$content = "Test Tag";
 
 echo aTag($tag, $attributes, $content);
 echo "Done";
@@ -27,26 +26,25 @@ function aTag($tag, $attributes, $content){
 			if(isset($value)){
 				$html .= ' ' . $key . '="' . $value . '"';		
 			}
-     		}
+     	}
 		$html .= '>' . $content . "</" . $tag . "><br>\n";
 	    //return string containing the complete html tag 	
 		return $html;
 	} catch (Exception $e) {
 		logError($e);
+		print_r($e);
 	}
 	
 }
 
 function exception_tester($tag, $attributes, $content){
 		//test if the content is a string
-
 		if (!html5TagValidate($tag)){
-                        throw new Exception("Invalid HTML5 tag.", 111);
-                }		
+            throw new Exception("Invalid HTML5 tag.", 111);
+        }		
 		if(!is_array($attributes)){
-			throw new Exception("Attribute must be an array.",112);			
+			throw new Exception("Attribute must be an array.", 112);			
 		}
-
 		if(!is_string($content)){
 			throw  new Exception("Content must be strings", 113);
 		}
@@ -63,7 +61,7 @@ function logError($anyError) {
 			   "On line: " . $traceError[0]['line'],
 			   "in " . $traceError[0]['file'],
 			   "Classification: " . classify($anyError->getCode()));	
-
+	//print_r($errorInfo);
 }
 
 //this function assumes that a severe error code is between 111 and 120 
@@ -84,7 +82,7 @@ function classify($code){
 */
 function html5TagValidate($tag){
 
-                html5ValidTags = array ("!--", "!DOCTYPE", "a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdo",
+                $html5ValidTags = array ("!--", "!DOCTYPE", "a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdo",
                  "blockquote", "body", "br", "button", "canvas", "caption", "cite", "code", "col", "colgroup", "command", "datalist", "dd",
                  "del", "details", "dfn", "div", "dl", "dt", "em", "embed", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2",
                  "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "keygen", "kbd",
@@ -93,16 +91,10 @@ function html5TagValidate($tag){
                  "small", "source", "span", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "textarea", "tfoot", "th",
                  "thead", "time", "title", "tr", "ul", "var", "video", "wbr"  );
 
-
                 if (!in_array($tag, $html5ValidTags)){
                         return false;
                 }else{
                         return true;
                 }
-
 }
-
-
 ?>
-
-
