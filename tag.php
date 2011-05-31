@@ -41,14 +41,14 @@ function exception_tester($tag, $attributes, $content){
 		//test if the content is a string
 
 		if (!html5TagValidate($tag)){
-                        throw new Exception("Invalid HTML5 tag.", 123);
+                        throw new Exception("Invalid HTML5 tag.", 111);
                 }		
 		if(!is_array($attributes)){
-			throw new Exception("Attribute must be an array.",121);			
+			throw new Exception("Attribute must be an array.",112);			
 		}
 
 		if(!is_string($content)){
-			throw  new Exception("Content must be strings", 111);
+			throw  new Exception("Content must be strings", 113);
 		}
 }
 
