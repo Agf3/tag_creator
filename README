@@ -1,7 +1,2 @@
-Greetings reader!
-
-You have now embarked upon the journey to create correct and valid tags in HTML5.
-
-Thank you,
-
-The committee
+html5 only allows tags which are valid in HTML5
+old html only allows tags which are valid in HTML versions up until but not including HTML5
