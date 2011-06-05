@@ -1,0 +1,12 @@
+"Message: Invalid HTML5 tag.","File: C:\xampp\htdocs\project\tag_generator.php","Thrown on line: 48","Code: 111","Called by function: exception_tester","On line: 26","in fileC:\xampp\htdocs\project\tag_generator.php","Classification: Severe"
+
+"Message: Content must be strings","File: C:\xampp\htdocs\project\tag_generator.php","Thrown on line: 57","Code: 113","Called by function: exception_tester","On line: 26","in fileC:\xampp\htdocs\project\tag_generator.php","Classification: Severe"
+
+"Message: Attributes must be an array.","File: C:\xampp\htdocs\project\tag_generator.php","Thrown on line: 53","Code: 112","Called by function: exception_tester","On line: 26","in fileC:\xampp\htdocs\project\tag_generator.php","Classification: Severe"
+
+"Message: Invalid HTML5 tag.","File: C:\xampp\htdocs\project\tag_generator.php","Thrown on line: 52","Code: 111","Called by function: exception_tester","On line: 26","in fileC:\xampp\htdocs\project\tag_generator.php","Classification: Severe"
+
+"Message: Invalid HTML5 tag.","File: C:\xampp\htdocs\project\tag_generator.php","Thrown on line: 52","Code: 111","Called by function: exception_tester","On line: 26","in fileC:\xampp\htdocs\project\tag_generator.php","Classification: Severe"
+
+"Message: Invalid HTML5 tag.","File: C:\xampp\htdocs\project\tag_generator.php","Thrown on line: 52","Code: 111","Called by function: exception_tester","On line: 26","in fileC:\xampp\htdocs\project\tag_generator.php","Classification: Severe"
+
