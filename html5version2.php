@@ -24,7 +24,8 @@
 		if (!in_array($tag, $html5ValidTags)){
                         return false;
 		}else{
-			
+			//this will change the way the method allows/disallows closing tags/attributes based on special 
+                        //attributes of certain tags
 			switch($tagDifferences){
 				case "!--"
 					$closing_tag = "--";
