@@ -4,44 +4,45 @@
 
 <?php 
 
-include 'file_manager.php';
-
 interface IErrorHandler{
-	function printErrorMsg($anyError);
-	function logError($anyError);
-	function classify($code);
+	function __construct($path, $file, $any_error)
 }
 
 class ErrorHandler implements IErrorHandler{
 		
-	public function __construct($path, $file, $anyError){
+	public function __construct($path, $file, $any_error){
 		$this->printErrorMsg($anyError);
-		$fm = new FileManager();
-		$fm->write_csv_log($path, $file, $this->logError($anyError));
-		;
+		$this->write_csv_log($path, $file, $this->logError($any_error));
 	}
 	
-	public function printErrorMsg($anyError){
-		echo $anyError->getMessage() . "<br>\n";
+	private function printErrorMsg($any_error){
+		echo $any_error->getMessage() . "<br>\n";
+	}
+	
+	//write array containing error details to csv file
+	private function write_csv_log($path, $file, $log_array){
+		$csv = fopen($path . $file, 'a');
+		fputcsv($csv, $log_array);
+		fwrite($csv, "\r\n");
 	}
 		
 	//parse exception details and creates an array that can be written to a log
-	public function logError($anyError) {
-		$traceError = $anyError->getTrace();
-		$errorInfo = array("Message: " . $anyError->getMessage(),
-						   "File: " . $anyError->getFile(), 
-			    		   "Thrown on line: " . $anyError->getLine(),
-						   "Code: " . $anyError->getCode(), 
+	private function logError($any_error) {
+		$traceError = $any_error->getTrace();
+		$errorInfo = array("Message: " . $any_error->getMessage(),
+						   "File: " . $any_error->getFile(), 
+			    		   "Thrown on line: " . $any_error->getLine(),
+						   "Code: " . $any_error->getCode(), 
 			 			   "Called by function: " . $traceError[0]['function'],
 						   "On line: " . $traceError[0]['line'],
 						   "in file" . $traceError[0]['file'],
-						   "Classification: " . $this->classify($anyError->getCode()));	
+						   "Classification: " . $this->classify($any_error->getCode()));	
 		return $errorInfo;
 	}
 		
 	//this function assumes that a severe error code is between 111 and 120 
 	//while a warning error code is less than or equal to 110
-	function classify($code){
+	private function classify($code){
 		if($code <= 110){
 			$classify = "Warning";
 		}

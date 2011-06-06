@@ -6,8 +6,9 @@
 
 <?php
 
+include 'error_handler.php';
+
 interface IFileManager{
-	function write_csv_log($path, $file, $log_array);
 	function createFile($path, $file);
 	function readFile($path, $file);
 	function updateFile($path, $file, $content, $mode);
@@ -16,100 +17,122 @@ interface IFileManager{
 }
 
 class FileManager implements IFileManager{
-	
-	//write array containing error details to csv file
-	function write_csv_log($path, $file, $log_array){
-		$csv = fopen($path . $file, 'a');
-		fputcsv($csv, $log_array);
-		fwrite($csv, "\r\n");
-	}
-	
+		
 	public function createFile($path, $file){
 		try{
-			if (file_exists($path . $file)){    						//checks existance of file
-				throw new FileExistsException('File already exists!', 102);     	//throws exception if file already exists
+			$this->validate_path_file($path, $file, null);
+			if (file_exists($path . $file)){    									
+				throw new FileExistsException('File already exists!', 102);     			//throws exception if file already exists
 			}
-			fopen($handle = $path . $file, 'w+');    			 		//creates new file
-            fclose($handle);     										//closes newly created file
+			fopen($handle = $path . $file, 'w+');    			 		
+            fclose($handle);     															//closes newly created file
         }
 		catch(FileExistsException $fee){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fee);			//writes error message to screen and writes error to log
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fee);		//displays error message and writes error to log
+		}
+		catch (InvalidFileParameterException $ifpe){
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $ifpe);
 		}
 	}
 
 	public function readFile($path, $file){
 		try{
-			if (!file_exists($path . $file)){    						//confirms existance of file
-				throw new FileNotFoundException('File does not exist!', 101); //throws exception if file does not exist
+			$this->validate_path_file($path, $file, null);
+			if (!file_exists($path . $file)){    											//confirms existance of file
+				throw new FileNotFoundException('File does not exist!', 101); 				//throws exception if file does not exist
 			}
-			if (!is_readable($path . $file)){     						//confirms that file is readable
-				throw new FileNotReadableException('File is not readable!', 104);     //throws exception if file is not readable
+			if (!is_readable($path . $file)){     											//confirms that file is readable
+				throw new FileNotReadableException('File is not readable!', 104);     		//throws exception if file is not readable
 			}
-			fopen($handle = $path . $file, 'r');     					//opens file
-			$content = fread($handle, filesize($path . $file));     	//reads contents of file
-			return $content;     										//returns contents of file
-			fclose($handle);     										//closes file
+			$handle = fopen($path . $file, 'r');     										//opens file
+			$content = fread($handle, filesize($path . $file));     						//reads contents of file
+			return $content;     															//returns contents of file
+			fclose($handle);     															//closes file
 		}
 		catch(FileNotFoundException $fnfe){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);			//writes error message to screen and writes error to log
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);		//displays error message and writes error to log
 		}
 		catch(FileNotReadableException $fnre){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnre);
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnre);		//displays error message and writes error to log
+		}
+		catch (InvalidFileParameterException $ifpe){
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $ifpe);		//displays error message and writes error to log
 		}
 	}
 
-	public function updateFile($path, $file, $content, $mode){    	 							//Valid Modes: (a) Append (w) Write
+	public function updateFile($path, $file, $content, $mode){    	 						//Valid Modes: (a) Append (w) Write
 		try{
-			if ((!$mode == 'a') && (!$mode == 'w')){     										//confirms validity of write mode selection
-				throw new InvalidWriteModeException('Invalid write mode selection!', 114);     //throws exception if invalid write mode is selected
+			$this->validate_path_file($path, $file, $content);
+			if ((!$mode == 'a') && (!$mode == 'w')){     										
+				throw new InvalidWriteModeException('Invalid write mode selection!', 114);  //throws exception if invalid write mode is selected
 			}
-			if (!file_exists($path . $file)){     												//confirms that file exists
-				throw new FileNotFoundException('File does not exist!', 100);     				//throws exception if file does not exist
+			if (!file_exists($path . $file)){     												
+				throw new FileNotFoundException('File does not exist!', 100);     			//throws exception if file does not exist
 			}
-			if (!is_writable($path . $file)){     												//confirms that file is writable
-				throw new FileNotWritableException('File is not writable!', 103);     			//throws exception if file is not writable
+			if (!is_writable($path . $file)){     												
+				throw new FileNotWritableException('File is not writable!', 103);     		//throws exception if file is not writable
 			}
-			fopen($handle = $path . $file, $mode);     											//opens file in appropriate mode
-			fwrite($handle, $content);     														//writes to file (append or write)
-			fclose($handle);     																//closes file
+			fopen($handle = $path . $file, $mode);     										//opens file in appropriate mode
+			fwrite($handle, $content);     													//writes to file (append or write)
+			fclose($handle);     															//closes file
 		}
 		catch(InvalidWriteModeException $iwme){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $iwme);
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $iwme);		//displays error message and writes error to log
 		}
 		catch(FileNotFoundException $fnfe){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);		//displays error message and writes error to log
 		}
 		catch(FileNotWritableException $fnwe){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnwe);			//writes error message to screen and writes error to log
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnwe);		//displays error message and writes error to log
+		}
+		catch (InvalidFileParameterException $ifpe){
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $ifpe);		//displays error message and writes error to log
 		}
 	}
 
 	public function deleteFile(){
 		try{
-			if (!file_exists($path . $file)){     												//confirms that file exists
+			if (!file_exists($path . $file)){     												
 				throw new FileNotFoundException('File does not exist!', 100);     				//throws exception if files does not exist
 			}
 			unlink($path . $file);     															//deletes file
 		}
 		catch(FileNotFoundException $fnfe){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);			//writes error message to screen and writes error to log
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);			//displays error message and writes error to log
 		}
 	}
 	
-	function file_modification_time($filename){
+	public function file_modification_time($filename){
 		try{
+			$this->validate_path_file($path, $file, $content);
 			if(!file_exists($filename)){
 				throw new FileNotFoundException ('File does not exist!', 100);
 			}
 			echo "$filename was last modified: " . date ("F d Y H:i:s.", filemtime($filename));
 		}
 		catch(FileNotFoundException $fnfe){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);				//writes error message to screen and writes error to log
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);		//displays error message and writes error to log
+		}
+		catch (InvalidFileParameterException $ifpe){
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $ifpe);		//displays error message and writes error to log
+		}
+	}
+	
+	private function validate_path_file($path, $file, $content){
+		$param = array($path, $file, $content);
+		foreach ($param as $value) {
+			if(isset($value)){
+				if(!is_string($value)){
+					throw new InvalidFileParameter("Any path, filename, or contents must be strings!", 105); //throws exception if path, file, 
+				}																							 //or content isn't a string
+			}
 		}
 	}
 
 }
 
+$fm = new FileManager();
+echo $fm->readFile('c:\xampp\htdocs\project\\', 'tester.txt');
 
 class FileExistsException extends Exception{ }
 
@@ -120,4 +143,6 @@ class FileNotReadableException extends Exception{ }
 class FileNotWritableException extends Exception{ }
 
 class InvalidWriteModeException extends Exception{ }
+
+class InvalidFileParameterException extends Exception{ }
 ?>

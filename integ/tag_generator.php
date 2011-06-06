@@ -9,18 +9,11 @@
 <?php	
 
 include 'error_handler.php';
-include 'tag_exceptions.php';
-
-interface ITagGenerator{
-	function aTag($tag, $attributes, $content);
-	function exception_tester($tag, $attributes, $content);
-	function html5TagValidate($tag);
-}
 
 class TagGenerator implements ITagGenerator{
 		
 	//create an html a tag
-	function aTag($tag, $attributes, $content){
+	private function aTag($tag, $attributes, $content){
 		try{
 			//test for exceptions
 			$this->exception_tester($tag, $attributes, $content);
@@ -46,7 +39,7 @@ class TagGenerator implements ITagGenerator{
 		}
 	}
 	
-	function exception_tester($tag, $attributes, $content){
+	private function exception_tester($tag, $attributes, $content){
 			//test validity of the html tag
 			if (!$this->html5TagValidate($tag)){
 	            throw new InvalidTagException("Invalid HTML5 tag.", 111);
@@ -64,7 +57,7 @@ class TagGenerator implements ITagGenerator{
 	/*
 	*This function will check if the given tag is a valid tag in HTML5.
 	*/
-	function html5TagValidate($tag){
+	private function html5TagValidate($tag){
 	
 		    $html5ValidTags = array ("!--", "!DOCTYPE", "a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdo",
 		    "blockquote", "body", "br", "button", "canvas", "caption", "cite", "code", "col", "colgroup", "command", "datalist", "dd",
@@ -82,6 +75,12 @@ class TagGenerator implements ITagGenerator{
 		    }
 	}
 }
+
+class InvalidTagException extends Exception{ }
+
+class NonArrayException extends Exception{ }
+
+class NonStringException extends Exception{ }
 
 $tag = "a";
 $attributes = array("id" => "myid", "href" => "http://www.google.com", "class" => "myfirstclass mysecondclass");
