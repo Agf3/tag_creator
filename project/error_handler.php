@@ -5,17 +5,17 @@
 <?php 
 
 interface IErrorHandler{
-	function __construct($path, $file, $any_error)
+	function __construct($path, $file, $any_error);
 }
 
 class ErrorHandler implements IErrorHandler{
 		
 	public function __construct($path, $file, $any_error){
-		$this->printErrorMsg($anyError);
+		$this->print_error_msg($any_error);
 		$this->write_csv_log($path, $file, $this->logError($any_error));
 	}
 	
-	private function printErrorMsg($any_error){
+	private function print_error_msg($any_error){
 		echo $any_error->getMessage() . "<br>\n";
 	}
 	

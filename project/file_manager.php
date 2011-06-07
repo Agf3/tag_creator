@@ -13,7 +13,7 @@ interface IFileManager{
 	function readFile($path, $file);
 	function updateFile($path, $file, $content, $mode);
 	function deleteFile();
-	function file_modification_time($filename);
+	function file_modification_time($path, $file);
 }
 
 class FileManager implements IFileManager{
@@ -22,7 +22,7 @@ class FileManager implements IFileManager{
 		try{
 			$this->validate_path_file($path, $file, null);
 			if (file_exists($path . $file)){    									
-				throw new FileExistsException('File already exists!', 102);     			//throws exception if file already exists
+				throw new FileExistsException();     			//throws exception if file already exists
 			}
 			fopen($handle = $path . $file, 'w+');    			 		
             fclose($handle);     															//closes newly created file
@@ -38,11 +38,11 @@ class FileManager implements IFileManager{
 	public function readFile($path, $file){
 		try{
 			$this->validate_path_file($path, $file, null);
-			if (!file_exists($path . $file)){    											//confirms existance of file
-				throw new FileNotFoundException('File does not exist!', 101); 				//throws exception if file does not exist
+			if (!file_exists($path . $file)){    											
+				throw new FileNotFoundException(); 				//throws exception if file does not exist
 			}
-			if (!is_readable($path . $file)){     											//confirms that file is readable
-				throw new FileNotReadableException('File is not readable!', 104);     		//throws exception if file is not readable
+			if (!is_readable($path . $file)){     											
+				throw new FileNotReadableException();     		//throws exception if file is not readable
 			}
 			$handle = fopen($path . $file, 'r');     										//opens file
 			$content = fread($handle, filesize($path . $file));     						//reads contents of file
@@ -50,6 +50,7 @@ class FileManager implements IFileManager{
 			fclose($handle);     															//closes file
 		}
 		catch(FileNotFoundException $fnfe){
+			//echo $fnfe->getMessage();
 			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);		//displays error message and writes error to log
 		}
 		catch(FileNotReadableException $fnre){
@@ -64,13 +65,13 @@ class FileManager implements IFileManager{
 		try{
 			$this->validate_path_file($path, $file, $content);
 			if ((!$mode == 'a') && (!$mode == 'w')){     										
-				throw new InvalidWriteModeException('Invalid write mode selection!', 114);  //throws exception if invalid write mode is selected
+				throw new InvalidWriteModeException();  		//throws exception if invalid write mode is selected
 			}
 			if (!file_exists($path . $file)){     												
-				throw new FileNotFoundException('File does not exist!', 100);     			//throws exception if file does not exist
+				throw new FileNotFoundException();     			//throws exception if file does not exist
 			}
 			if (!is_writable($path . $file)){     												
-				throw new FileNotWritableException('File is not writable!', 103);     		//throws exception if file is not writable
+				throw new FileNotWritableException();     		//throws exception if file is not writable
 			}
 			fopen($handle = $path . $file, $mode);     										//opens file in appropriate mode
 			fwrite($handle, $content);     													//writes to file (append or write)
@@ -93,7 +94,7 @@ class FileManager implements IFileManager{
 	public function deleteFile(){
 		try{
 			if (!file_exists($path . $file)){     												
-				throw new FileNotFoundException('File does not exist!', 100);     				//throws exception if files does not exist
+				throw new FileNotFoundException();     				//throws exception if files does not exist
 			}
 			unlink($path . $file);     															//deletes file
 		}
@@ -102,11 +103,11 @@ class FileManager implements IFileManager{
 		}
 	}
 	
-	public function file_modification_time($filename){
+	public function file_modification_time($path, $file){
 		try{
-			$this->validate_path_file($path, $file, $content);
+			$this->validate_path_file($path, $file, null);
 			if(!file_exists($filename)){
-				throw new FileNotFoundException ('File does not exist!', 100);
+				throw new FileNotFoundException ();
 			}
 			echo "$filename was last modified: " . date ("F d Y H:i:s.", filemtime($filename));
 		}
@@ -123,8 +124,8 @@ class FileManager implements IFileManager{
 		foreach ($param as $value) {
 			if(isset($value)){
 				if(!is_string($value)){
-					throw new InvalidFileParameter("Any path, filename, or contents must be strings!", 105); //throws exception if path, file, 
-				}																							 //or content isn't a string
+					throw new InvalidFileParameterException(); //throws exception if path, file, or content isn't a string
+				}																							 
 			}
 		}
 	}
@@ -134,15 +135,39 @@ class FileManager implements IFileManager{
 $fm = new FileManager();
 echo $fm->readFile('c:\xampp\htdocs\project\\', 'tester.txt');
 
-class FileExistsException extends Exception{ }
+class FileExistsException extends Exception{
+	public $message = 'File already exists!';
+	public $code = 102;
+	public function _construct($message, $code){ }
+}
 
-class FileNotFoundException extends Exception{ }
+class FileNotFoundException extends Exception{ 
+	public $message = 'File does not exist';
+	public $code = 100;
+	public function _construct($message, $code){ }
+}
 
-class FileNotReadableException extends Exception{ }
+class FileNotReadableException extends Exception{ 
+	public $message = 'File is not readable!';
+	public $code = 104;
+	public function _construct($message, $code){ }
+}
 
-class FileNotWritableException extends Exception{ }
+class FileNotWritableException extends Exception{ 
+	public $message = 'File is not writable!';
+	public $code = 103;
+	public function _construct($message, $code){ }
+}
 
-class InvalidWriteModeException extends Exception{ }
+class InvalidWriteModeException extends Exception{
+	public $message = 'Invalid write mode selection!';
+	public $code = 114;
+	public function _construct($message, $code){ }
+}
 
-class InvalidFileParameterException extends Exception{ }
+class InvalidFileParameterException extends Exception{
+	public $message = 'Any path, file, or content must be strings!';
+	public $code = 105;
+	public function _construct($message, $code){ }
+}
 ?>

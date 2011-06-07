@@ -10,10 +10,18 @@
 
 include 'error_handler.php';
 
-class TagGenerator implements ITagGenerator{
+interface ITagGenerator{
+	function __construct($tag, $attributes, $content);
+}
+
+class TagGenerator {
+	
+	public function __construct($tag, $attributes, $content){
+		echo $this->aTag($tag, $attributes, $content);
+	}
 		
 	//create an html a tag
-	private function aTag($tag, $attributes, $content){
+	function aTag($tag, $attributes, $content){
 		try{
 			//test for exceptions
 			$this->exception_tester($tag, $attributes, $content);
@@ -41,16 +49,16 @@ class TagGenerator implements ITagGenerator{
 	
 	private function exception_tester($tag, $attributes, $content){
 			//test validity of the html tag
-			if (!$this->html5TagValidate($tag)){
-	            throw new InvalidTagException("Invalid HTML5 tag.", 111);
+			if(!$this->html5TagValidate($tag)){
+	            throw new InvalidTagException();
 	        }	
 	        //test if attributes are in an array	
 			if(!is_array($attributes)){
-				throw new NonArrayException("Attributes must be an array.", 112);			
+				throw new NonArrayException();			
 			}
 			//test if the content is a string
 			if(!is_string($content)){
-				throw  new NonStringException("Content must be strings", 113);
+				throw  new NonStringException();
 			}
 	}
 			
@@ -76,19 +84,29 @@ class TagGenerator implements ITagGenerator{
 	}
 }
 
-class InvalidTagException extends Exception{ }
+class InvalidTagException extends Exception{ 
+	public $message = 'Invalid HTML5 tag';
+	public $code = 111;
+	public function _construct($message, $code){ }
+}
 
-class NonArrayException extends Exception{ }
+class NonArrayException extends Exception{ 
+	public $message = 'Attributes must be in an array';
+	public $code = 112;
+	public function _construct($message, $code){ }
+}
 
-class NonStringException extends Exception{ }
+class NonStringException extends Exception{
+	public $message = 'Content must be a string';
+	public $code = 113;
+	public function _construct($message, $code){ }
+}
 
+//is this what is meant by automatically starting objects ?
 $tag = "a";
-$attributes = array("id" => "myid", "href" => "http://www.google.com", "class" => "myfirstclass mysecondclass");
+$attributes = array("id" => "myid", "href" => "http://localhost/build/chaim.php", "class" => "myfirstclass mysecondclass");
 $content = "Test tag";
-
-$tg = new TagGenerator();
-
-echo $tg->aTag($tag, $attributes, $content);
+new TagGenerator($tag, $attributes, $content);
 echo "Done";
 
 ?>
