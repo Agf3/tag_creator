@@ -106,7 +106,7 @@ class NonStringException extends Exception{
 
 //is this what is meant by automatically starting objects ?
 $tag = "dfg";
-$attributes = array("id" => "myid", "href" => "http://localhost/build/chaim.php", "class" => "myfirstclass mysecondclass");
+$attributes = array("id" => "myid", "href" => "http://www.http://ruxtongroup.com", "class" => "myfirstclass mysecondclass");
 $content = "Test tag";
 new TagGenerator($tag, $attributes, $content);
 echo "Done";
