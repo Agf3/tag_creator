@@ -31,7 +31,7 @@ class ErrorHandler implements IErrorHandler{
 		$traceError = $any_error->getTrace();
 		$errorInfo = array("Message: " . $any_error->getMessage(),
 						   "File: " . $any_error->getFile(), 
-			    		   "Thrown on line: " . $any_error->getLine(),
+			    		  	   "Thrown on line: " . $any_error->getLine(),
 						   "Code: " . $any_error->getCode(), 
 			 			   "Called by function: " . $traceError[0]['function'],
 						   "On line: " . $traceError[0]['line'],

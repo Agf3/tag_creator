@@ -25,7 +25,7 @@ class FileManager implements IFileManager{
 				throw new FileExistsException();     			//throws exception if file already exists
 			}
 			fopen($handle = $path . $file, 'w+');    			 		
-            fclose($handle);     															//closes newly created file
+            fclose($handle);     							//closes newly created file
         }
 		catch(FileExistsException $fee){
 			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fee);		//displays error message and writes error to log
@@ -39,15 +39,15 @@ class FileManager implements IFileManager{
 		try{
 			$this->validate_path_file($path, $file, null);
 			if (!file_exists($path . $file)){    											
-				throw new FileNotFoundException(); 				//throws exception if file does not exist
+				throw new FileNotFoundException(); 			//throws exception if file does not exist
 			}
 			if (!is_readable($path . $file)){     											
 				throw new FileNotReadableException();     		//throws exception if file is not readable
 			}
-			$handle = fopen($path . $file, 'r');     										//opens file
-			$content = fread($handle, filesize($path . $file));     						//reads contents of file
-			return $content;     															//returns contents of file
-			fclose($handle);     															//closes file
+			$handle = fopen($path . $file, 'r');     			//opens file
+			$content = fread($handle, filesize($path . $file));     	//reads contents of file
+			return $content;     						//returns contents of file
+			fclose($handle);     						//closes file
 		}
 		catch(FileNotFoundException $fnfe){
 			//echo $fnfe->getMessage();
@@ -73,9 +73,9 @@ class FileManager implements IFileManager{
 			if (!is_writable($path . $file)){     												
 				throw new FileNotWritableException();     		//throws exception if file is not writable
 			}
-			fopen($handle = $path . $file, $mode);     										//opens file in appropriate mode
-			fwrite($handle, $content);     													//writes to file (append or write)
-			fclose($handle);     															//closes file
+			fopen($handle = $path . $file, $mode);     			//opens file in appropriate mode
+			fwrite($handle, $content);     					//writes to file (append or write)
+			fclose($handle);     						//closes file
 		}
 		catch(InvalidWriteModeException $iwme){
 			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $iwme);		//displays error message and writes error to log
@@ -99,7 +99,7 @@ class FileManager implements IFileManager{
 			unlink($path . $file);     															//deletes file
 		}
 		catch(FileNotFoundException $fnfe){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);			//displays error message and writes error to log
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);	//displays error message and writes error to log
 		}
 	}
 	
