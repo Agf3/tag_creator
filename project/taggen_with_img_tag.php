@@ -24,9 +24,6 @@ class TagGenerator {
 		
 	//create an html a tag
 	function aTag($tag, $attributes, $content){
-		$closeTag= false;
-		
-
 		try{
 			//test for exceptions
 			$this->exception_tester($tag, $attributes, $content);
