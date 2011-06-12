@@ -34,10 +34,10 @@ class TagGenerator {
 					$html .= ' ' . $key . '="' . $value . '"';		
 				}
 	     		}
+			//opening tag gets closed. content/close tag is only added if tag isn't a void tag.
+			$html .= '>';	
 				if(!isCloseTagNeeded){
-					$html .= '>' . $content . "</" . $tag . "><br>\n";
-				}else{
-					$html .= '>' . "<br>";
+					$html .= $content . "</" . $tag . "><br>\n";
 				}
 		        //return string containing the complete html tag 	
 			return $html;
