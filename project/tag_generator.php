@@ -23,7 +23,7 @@ class TagGenerator {
 	}
 		
 	//create an html a tag
-	function aTag($tag, $attributes, $content){
+	private function aTag($tag, $attributes, $content){
 		try{
 			//test for exceptions
 			$this->exception_tester($tag, $attributes, $content);
