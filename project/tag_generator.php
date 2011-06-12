@@ -33,15 +33,15 @@ class TagGenerator {
 				if(isset($value)){
 					$html .= ' ' . $key . '="' . $value . '"';		
 				}
-	     	}
-	     	//opening tag gets closed. content/close tag is only added if tag isn't a void tag.
+	     		}
+	     		//opening tag gets closed. content/close tag is only added if tag isn't a void tag.
 			$html .= '>';
 				
 			if($this->isCloseTagNeeded($tag)){
 				$html .= $content . "</" . $tag . "><br>\n";
 			}
 			//return string containing the complete html tag 	
-		    return $html;
+		    	return $html;
 		}
 		catch (InvalidTagException $ite){
 			new ErrorHandler('c:\xampp\htdocs\project\\', 'tag_error_log.csv', $ite);
@@ -55,18 +55,18 @@ class TagGenerator {
 	}
 	
 	private function exception_tester($tag, $attributes, $content){
-			//test validity of the html tag
-			if(!$this->html5TagValidate($tag)){
+		//test validity of the html tag
+		if(!$this->html5TagValidate($tag)){
 	            throw new InvalidTagException();
 	        }	
 	        //test if attributes are in an array	
-			if(!is_array($attributes)){
-				throw new NonArrayException();			
-			}
-			//test if the content is a string
-			if(!is_string($content)){
-				throw  new NonStringException();
-			}
+		if(!is_array($attributes)){
+			throw new NonArrayException();			
+		}
+		//test if the content is a string
+		if(!is_string($content)){
+			throw  new NonStringException();
+		}
 	}
 			
 	/*
@@ -78,7 +78,7 @@ class TagGenerator {
 		    "blockquote", "body", "br", "button", "canvas", "caption", "cite", "code", "col", "colgroup", "command", "datalist", "dd",
 		    "del", "details", "dfn", "div", "dl", "dt", "em", "embed", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2",
 		    "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "keygen", "kbd",
-		  	"label", "legend", "li", "link", "map", "mark", "menu", "meta", "meter", "nav", "noscript", "object", "ol", "optgroup",
+		    "label", "legend", "li", "link", "map", "mark", "menu", "meta", "meter", "nav", "noscript", "object", "ol", "optgroup",
 		    "option", "output", "p", "param", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select",
 		    "small", "source", "span", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "textarea", "tfoot", "th",
 		    "thead", "time", "title", "tr", "ul", "var", "video", "wbr"  );

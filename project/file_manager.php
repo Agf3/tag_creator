@@ -25,8 +25,8 @@ class FileManager implements IFileManager{
 				throw new FileExistsException();     			//throws exception if file already exists
 			}
 			fopen($handle = $path . $file, 'w+');    			 		
-            fclose($handle);     															//closes newly created file
-        }
+            		fclose($handle);     						//closes newly created file
+       	        }
 		catch(FileExistsException $fee){
 			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fee);		//displays error message and writes error to log
 		}
@@ -42,15 +42,14 @@ class FileManager implements IFileManager{
 				throw new FileNotFoundException(); 				//throws exception if file does not exist
 			}
 			if (!is_readable($path . $file)){     											
-				throw new FileNotReadableException();     		//throws exception if file is not readable
+				throw new FileNotReadableException();     			//throws exception if file is not readable
 			}
-			$handle = fopen($path . $file, 'r');     										//opens file
-			$content = fread($handle, filesize($path . $file));     						//reads contents of file
-			return $content;     															//returns contents of file
-			fclose($handle);     															//closes file
+			$handle = fopen($path . $file, 'r');     				//opens file
+			$content = fread($handle, filesize($path . $file));     		//reads contents of file
+			return $content;     							//returns contents of file
+			fclose($handle);     							//closes file
 		}
 		catch(FileNotFoundException $fnfe){
-			//echo $fnfe->getMessage();
 			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);		//displays error message and writes error to log
 		}
 		catch(FileNotReadableException $fnre){
@@ -61,7 +60,7 @@ class FileManager implements IFileManager{
 		}
 	}
 
-	public function updateFile($path, $file, $content, $mode){    	 						//Valid Modes: (a) Append (w) Write
+	public function updateFile($path, $file, $content, $mode){    	 					//Valid Modes: (a) Append (w) Write
 		try{
 			$this->validate_path_file($path, $file, $content);
 			if ((!$mode == 'a') && (!$mode == 'w')){     										
@@ -73,9 +72,9 @@ class FileManager implements IFileManager{
 			if (!is_writable($path . $file)){     												
 				throw new FileNotWritableException();     		//throws exception if file is not writable
 			}
-			fopen($handle = $path . $file, $mode);     										//opens file in appropriate mode
-			fwrite($handle, $content);     													//writes to file (append or write)
-			fclose($handle);     															//closes file
+			fopen($handle = $path . $file, $mode);     			//opens file in appropriate mode
+			fwrite($handle, $content);     					//writes to file (append or write)
+			fclose($handle);     						//closes file
 		}
 		catch(InvalidWriteModeException $iwme){
 			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $iwme);		//displays error message and writes error to log
@@ -94,12 +93,12 @@ class FileManager implements IFileManager{
 	public function deleteFile(){
 		try{
 			if (!file_exists($path . $file)){     												
-				throw new FileNotFoundException();     				//throws exception if files does not exist
+				throw new FileNotFoundException();     						//throws exception if files does not exist
 			}
 			unlink($path . $file);     															//deletes file
 		}
 		catch(FileNotFoundException $fnfe){
-			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);			//displays error message and writes error to log
+			new ErrorHandler('c:\xampp\htdocs\project\\', 'file_error_log.csv', $fnfe);		//displays error message and writes error to log
 		}
 	}
 	
@@ -124,16 +123,13 @@ class FileManager implements IFileManager{
 		foreach ($param as $value) {
 			if(isset($value)){
 				if(!is_string($value)){
-					throw new InvalidFileParameterException(); //throws exception if path, file, or content isn't a string
+					throw new InvalidFileParameterException(); 			//throws exception if path, file, or content isn't a string
 				}																							 
 			}
 		}
 	}
 
 }
-
-$fm = new FileManager();
-echo $fm->readFile('c:\xampp\htdocs\project\\', 'tester.txt');
 
 class FileExistsException extends Exception{
 	public $message = 'File already exists!';
